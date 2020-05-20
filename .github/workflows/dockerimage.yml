@@ -16,8 +16,13 @@ jobs:
     - name: Get the version
       id: get_tag
       run: |
-        echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+        echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
         echo ${GITHUB_SHA::6} >> properties.yml
+    - name: Test get tag
+      env:
+        RELEASE_VERSION: ${{ steps.get_tag.outputs.tag }}
+      run: |
+        echo $RELEASE_VERSION
     - name: Docker build & push
       run: |
         DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
