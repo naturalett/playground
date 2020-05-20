@@ -5,8 +5,6 @@ jobs:
     name: Docker build and push
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1.0
-      name: Check out code
     - uses: mr-smithers-excellent/docker-build-push@v3
       name: Build & push Docker image
       with:
