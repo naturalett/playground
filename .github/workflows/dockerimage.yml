@@ -16,12 +16,18 @@ jobs:
     - name: Get the version
       id: vars
       run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
-    - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag naturalett/playground:${{steps.vars.outputs.tag}}
-    - name: Push the tagged Docker image
-      run: docker push naturalett/playground:${{steps.vars.outputs.tag}}
-    - name: Build the latest Docker image
-      run: docker build . --file Dockerfile --tag naturalett/playground:latest
-    - name: Push the latest Docker image
-      run: docker push naturalett/playground:latest
+    - name: Docker build & push
+      run: |
+        DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
+        docker tag ${{ secrets.IMAGE_NAME }}:latest ${{ secrets.IMAGE_NAME }}:$GITHUB_SHA
+        docker push ${{ secrets.IMAGE_NAME }}:$GITHUB_SHA
+        docker push ${{ secrets.IMAGE_NAME }}:latest
+#    - name: Build the tagged Docker image
+#      run: docker build . --file Dockerfile --tag naturalett/playground:${{steps.vars.outputs.tag}}
+#    - name: Push the tagged Docker image
+#      run: docker push naturalett/playground:${{steps.vars.outputs.tag}}
+#    - name: Build the latest Docker image
+#      run: docker build . --file Dockerfile --tag naturalett/playground:latest
+#    - name: Push the latest Docker image
+#      run: docker push naturalett/playground:latest
 
