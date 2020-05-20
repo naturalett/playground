@@ -14,12 +14,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Get the version
-      id: releaseTag
+      id: get_tag
       run: echo ::set-output name=releaseTag::${GITHUB_REF/refs\/tags\//}
     - name: Set properties file
       run: |
         echo gitRevision=${GITHUB_SHA::6} >> properties.yml
-        echo releaseTag=${releaseTag} >> properties.yml
+        echo releaseTag=${{ steps.get_tag.outputs.releaseTag }} >> properties.yml
     - name: Docker build & push
       run: |
         DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
