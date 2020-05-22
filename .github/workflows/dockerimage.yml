@@ -13,24 +13,13 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - uses: actions/checkout@v1
     - name: 'Get Previous tag'
       id: previoustag
       uses: "WyriHaximus/github-action-get-previous-tag@master"
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    - name: Get Latest Release
-      id: latest_version
-      uses: abatilo/release-info-action@v1.1.0
-      with:
-        owner: naturalett
-        repo: playground
     - name: Example of consumption of the output
-      env:
-        LATEST: ${{ steps.latest_version.outputs.latest_tag }}
-        LATEST_DATE: ${{ steps.latest_version.outputs.latest_tag_published_at }}
       run: |
-        echo "Version $LATEST was released at $LATEST_DATE"
         echo "TAG : ${{ steps.previoustag.outputs.tag }}"
     - name: Print latest release tag
       run: echo ${{ steps.latest_version.outputs.latest_tag }}
@@ -45,7 +34,7 @@ jobs:
       if: success() && (github.ref == 'refs/heads/master')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
-        echo release-tag=${{ steps.latest_version.outputs.latest_tag }}-${GITHUB_SHA::6} >> properties.yml
+        echo release-tag=${{ steps.previoustag.outputs.tag }}-${GITHUB_SHA::6} >> properties.yml
     - name: Docker build & push
       run: |
         DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
