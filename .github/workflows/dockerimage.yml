@@ -13,28 +13,20 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: 'Get Previous tag'
-      id: previoustag
-      uses: "WyriHaximus/github-action-get-previous-tag@master"
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    - name: Example of consumption of the output
-      run: |
-        echo "TAG : ${{ steps.previoustag.outputs.tag }}"
-    - name: Print latest release tag
-      run: echo ${{ steps.latest_version.outputs.latest_tag }}
-    - name: Get git tag
-      id: get_tag
+    - name: Set properties file with release tag
       if: success() && startsWith(github.ref, 'refs/tags/')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
-        echo release-tag=${GITHUB_REF/refs\/tags\//} >> properties.yml
-    - name: Get git WITHOUT tag
-      id: get_tag2
+        echo release-tag=${GITHUB_REF/refs\/tags\//} >> properties.yml     
+    - name: Set properties file with previous release tag
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@master"
       if: success() && (github.ref == 'refs/heads/master')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
         echo release-tag=${{ steps.previoustag.outputs.tag }}-${GITHUB_SHA::6} >> properties.yml
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Docker build & push
       run: |
         DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
