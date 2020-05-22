@@ -27,7 +27,7 @@ jobs:
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
         echo release-tag=${GITHUB_REF/refs\/tags\//} >> properties.yml
     - name: Get git WITHOUT tag
-      id: get_tag
+      id: get_tag2
       if: success() && (github.ref == 'refs/heads/master')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
