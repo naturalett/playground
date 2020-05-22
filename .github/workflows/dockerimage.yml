@@ -20,6 +20,7 @@ jobs:
         echo release-tag=${GITHUB_REF/refs\/tags\//} >> properties.yml
     - name: Get Previous tag
       id: previoustag
+      if: success() && (github.ref == 'refs/heads/master')
       uses: "WyriHaximus/github-action-get-previous-tag@master"
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"     
