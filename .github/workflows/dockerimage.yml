@@ -22,8 +22,14 @@ jobs:
       if: success() && (github.ref == 'refs/heads/master')
       uses: "WyriHaximus/github-action-get-previous-tag@master"
       env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"     
-    - name: Set properties file with previous release tag
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Get Previous tag2
+      id: previoustag2
+      if: success() && (github.ref == 'refs/heads/master')
+      run: ::set-output tag3=$(git describe --abbrev=0 --tags)
+    - name: Print result tag2
+      run: echo ${{ steps.previoustag2.outputs.tag }}
+    - name: Set properties file with previous release tag3
       if: success() && (github.ref == 'refs/heads/master')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
