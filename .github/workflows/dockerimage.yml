@@ -28,12 +28,12 @@ jobs:
       if: success() && (github.ref == 'refs/heads/master')
       run: echo "::set-output tag3=$(git describe --abbrev=0 --tags)"
     - name: Print result tag2
-      run: echo ${{ steps.previoustag2.outputs.tag }}
+      run: echo ${{ steps.previoustag2.outputs.tag3 }}
     - name: Set properties file with previous release tag3
       if: success() && (github.ref == 'refs/heads/master')
       run: |
         echo git-sha=${GITHUB_SHA::6} >> properties.yml
-        echo release-tag=${{ steps.previoustag.outputs.tag }}-${GITHUB_SHA::6} >> properties.yml
+        echo release-tag=${{ steps.previoustag2.outputs.tag3 }}-${GITHUB_SHA::6} >> properties.yml
     - name: Docker build & push
       run: |
         DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
