@@ -18,5 +18,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker build & push
       run: |
-        make build && make tag && make push
+        make build && make tag
+        make push
 
