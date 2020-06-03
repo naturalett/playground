@@ -14,6 +14,7 @@ jobs:
       id: pullreminder
       with:
         args: '{\"channel\":\"CSK7NF9T8GXA\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
+      run: echo env.STAR
     - name: Notify slack2
       id: pullreminder2
       run: |
