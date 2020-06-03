@@ -12,8 +12,8 @@ jobs:
         echo ::set-env name=STARS::$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count'):
     - name: Notify slack
       id: pullreminder
-      run:
-        args: '{\"channel\":\"CSK7NF9T8GXA\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: STARS\"}'
+      with:
+        args: '{\"channel\":\"CSK7NF9T8GXA\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
     - name: Notify slack2
       id: pullreminder2
       run: |
