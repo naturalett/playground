@@ -6,6 +6,12 @@ jobs:
     name: Docker build and push
     runs-on: ubuntu-latest
     steps:
+    - name: Notify slack3
+      uses: pullreminders/slack-action@master
+      with:
+        run: echo ::set-env name=STARS::$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count')
+        args: '{\"channel\":\"CSK7DNF9TA9GX\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
+        command: echo "Now at $ {{env.STAR}} stars."
     - name: Get current star count
       id: starcount
       run: |
