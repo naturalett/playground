@@ -16,7 +16,7 @@ jobs:
         args: '{\"channel\":\"CSK7NF9T8GXA\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
     - name: Notify slack2
       id: pullreminder2
-      run: |:
+      run: |
         echo '{\"channel\":\"CSK7NF9T8GXA\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
     - name: Check out code
       if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
