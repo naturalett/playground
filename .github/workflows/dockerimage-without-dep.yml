@@ -8,11 +8,12 @@ jobs:
     steps:
     - name: Notify slack3
       uses: actions/hello-world-javascript-action@master
+      id: previoustag2
       with:
         run: |
-          echo "::set-env name=STARS:$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count')"
-        args: '{\"channel\":\"CSK7N9TGX\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
-        command: echo "Now at $STARS  stars."
+          echo "::set-output name=STARS:$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count')"
+        args: '{\"channel\":\"CSK7N9TGX\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{ steps.previoustag2.outputs.STARS }}\"}'
+        command: echo "Now at ${{ steps.previoustag2.outputs.STARS }}  stars."
     - name: Get current star count
       id: starcount
       run: |
