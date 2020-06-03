@@ -10,8 +10,8 @@ jobs:
       uses: actions/hello-world-javascript-action@master
       with:
         run: |
-          echo ::set-env name=STARS::$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count')
-        args: '{\"channel\":\"CSK7N9TGX\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{env.STARS}}\"}'
+          STARS=$(curl --silent 'https://api.github.com/repos/layer5io/meshery' -H 'Accept: application/vnd.github.preview' | jq '.watchers_count')
+        args: '{\"channel\":\"CSK7N9TGX\",\"text\":\"Someone just starred Meshery! (https://github.com/layer5io/meshery/stargazers) Total stars: ${{STARS}}\"}'
         command: echo "Now at $STAR stars."
     - name: Get current star count
       id: starcount
