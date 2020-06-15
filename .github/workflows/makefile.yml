@@ -20,5 +20,6 @@ jobs:
     - name: Docker build & push
       run: |
         make build && make tag
+        make login
         make push
 
