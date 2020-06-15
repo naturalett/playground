@@ -20,7 +20,7 @@ jobs:
     - name: Docker build & push
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-	DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         make build && make tag
         make login
