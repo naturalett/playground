@@ -8,5 +8,4 @@ build:
 login:
 	docker login --username=$(DOCKER_USERNAME) --password=$(DOCKER_PASSWORD)
 push:
-	docker push naturalett/playground:latest
-	docker push naturalett/playground:$(VER)
+	docker push naturalett/playground:latest docker push naturalett/playground:$(VER)
