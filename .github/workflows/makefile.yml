@@ -1,6 +1,9 @@
 name: Docker Image CI Makefile
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   docker:
