@@ -15,7 +15,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker build & push
       run: |
-        DOCKER_BUILDKIT=1 docker build --no-cache -f envoy/Dockerfile ${{ secrets.IMAGE_NAME }} .
+        cat  envoy/Dockerfile | DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} -
         docker tag ${{ secrets.IMAGE_NAME }}:latest ${{ secrets.IMAGE_NAME }}:${GITHUB_SHA::6}
         docker push ${{ secrets.IMAGE_NAME }}:${GITHUB_SHA::6}
         docker push ${{ secrets.IMAGE_NAME }}:latest
