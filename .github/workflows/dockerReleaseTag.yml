@@ -19,6 +19,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker build & push
       run: |
-        cd  envoy && DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }}
+        cd  envoy && DOCKER_BUILDKIT=1 docker build --no-cache -t ${{ secrets.IMAGE_NAME }} .
         docker tag ${{ secrets.IMAGE_NAME }}:latest ${{ secrets.IMAGE_NAME }}:${GITHUB_SHA::6} ${{ secrets.IMAGE_NAME }}:${GITHUB_REF/refs\/tags\//}
         docker push ${{ secrets.IMAGE_NAME }}
