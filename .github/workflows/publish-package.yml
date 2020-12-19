@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  bumpTag_build_and_publish:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
