@@ -1,10 +1,9 @@
 name: Create Release
 
 on:
-  workflow_run:
-    workflows: ["Publish package"]
-    types: 
-      - completed
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   release:
