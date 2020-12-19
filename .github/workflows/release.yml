@@ -11,13 +11,18 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2.2.0
+      - name: Set env
+        run: echo "git_tag=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
+      - name: Set2 env2
+        run: echo "${{ env.git_tag }} and   $GITHUB_ENV"
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Set3 env3
-        run: echo "${{ env.base-ref }} "
+        run: echo "${{ env.base-ref }} echo ${{ env.myToken}} "
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
