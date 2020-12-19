@@ -2,9 +2,8 @@ name: Release Drafter
 
 on:
   push:
-    # our release branch
-    branches:
-      - master
+    branches-ignore:
+      - '**'
 
 jobs:
   update_release_draft:
