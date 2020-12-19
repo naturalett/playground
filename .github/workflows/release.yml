@@ -11,6 +11,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
