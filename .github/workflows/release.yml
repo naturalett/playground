@@ -14,20 +14,22 @@ jobs:
       - uses: actions/checkout@v2.2.0
       - name: Set env
         run: echo "git_tag=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
+      - name: Set2 env2
+        run: echo "${{ env.git_tag }} and   $GITHUB_ENV"
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
-          base-ref: ${{ env.PACKAGE_VERSION }}
+          base-ref: "${{ env.git_tag }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "refs/tags/${{ env.PACKAGE_VERSION }}"
-          release_name: "Release refs/tags/${{ env.PACKAGE_VERSION }}"
+          tag_name: "refs/tags/${{ env.git_tag }}"
+          release_name: "Release refs/tags/${{ env.git_tag }}"
           body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
