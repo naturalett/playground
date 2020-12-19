@@ -5,15 +5,14 @@ on:
     workflows: ["Publish package"]
     types: 
       - completed
-  push:
-    tags:
-      - 'v*'
 
 jobs:
   release:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Set env
+        run: echo ${{ github.event.workflow_run}}
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
