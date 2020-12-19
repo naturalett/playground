@@ -11,6 +11,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2.2.0
       - name: Set env
         run: echo "base_ref=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
       - name: Generate changelog
