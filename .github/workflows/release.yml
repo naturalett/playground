@@ -3,8 +3,7 @@ name: Create Release
 on:
   workflow_run:
     workflows: ["Publish package"]
-    tags:
-      - 'v*'
+    branches: [main]
     types: 
       - completed
 
