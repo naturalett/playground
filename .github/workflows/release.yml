@@ -11,6 +11,9 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2.2.0
+      - name: Set env
+        run: echo "git_tag=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
@@ -22,8 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "refs/tags/$base_ref"
-          release_name: "Release refs/tags/$base_ref"
+          tag_name: "refs/tags/$git_tag"
+          release_name: "Release refs/tags/$git_tag"
           body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
