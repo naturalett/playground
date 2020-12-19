@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Set env
+        run: echo "LIMINAL_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
