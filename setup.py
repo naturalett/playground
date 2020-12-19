@@ -5,7 +5,7 @@ with open("packaging_tutorial/README.md", "r") as fh:
 
 setuptools.setup(
     name="example-pkg-naturalett", # Replace with your own username
-    version="0.0.2",
+    version=os.environ.get("LIMINAL_BUILD_VERSION", os.environ.get('LIMINAL_VERSION', None)),
     author="Example Author",
     author_email="author@example.com",
     description="A small example package",
