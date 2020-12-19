@@ -12,25 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.2.0
-      - name: Set env
-        run: echo "git_tag=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
-      - name: Set2 env2
-        run: echo "${{ env.git_tag }} and   $GITHUB_ENV"
+        with:
+          fetch-depth: 0
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@master"
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v0.4.4
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set3 env3
-        run: echo "${{ env.base-ref }} echo ${{ env.myToken}} "
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "refs/tags/${{ env.base-ref }}"
-          release_name: "Release refs/tags/${{ env.base-ref }}"
+          tag_name: "refs/tags/${{ steps.previoustag.outputs.tag }}"
+          release_name: "Release refs/tags/${{ steps.previoustag.outputs.tag }}"
           body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
