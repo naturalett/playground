@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Set env
         run: echo ::set-env name=LIMINAL_VERSION::$(echo ${GITHUB_REF#refs/*/})
       - name: Set up Python
         uses: actions/setup-python@v1
