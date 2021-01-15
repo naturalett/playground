@@ -12,6 +12,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
