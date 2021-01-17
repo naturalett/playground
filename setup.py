@@ -22,10 +22,11 @@ def do_setup() -> None:
         When github action test-pipy-publish.yml got triggered then increment the release version.
         i.e. release vesion + dev0
         """
-        if os.getenv(TEST_PYPI_PUBLISH) == 'true':
+        if os.getenv("TEST_PYPI_PUBLISH").lower() == "true":
             setup_kwargs['use_scm_version'] = {'local_scheme': local_scheme}
             setup_kwargs['setup_requires'] = ['setuptools_scm']
 
+    test_pypi_publish()
     setuptools.setup(
         name="example-pkg-naturalett", # Replace with your own username
         version=os.environ.get("LIMINAL_BUILD_VERSION", os.environ.get('LIMINAL_VERSION', None)),
