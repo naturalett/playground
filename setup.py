@@ -1,8 +1,13 @@
 import setuptools, os
 from os.path import dirname, relpath
 
+
+with open("packaging_tutorial/README.md", "r") as fh:
+    long_description = fh.read()
+
 def local_scheme(version):
     return ""
+
 
 setuptools.setup(
     name="example-pkg-naturalett", # Replace with your own username
