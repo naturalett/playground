@@ -29,9 +29,7 @@ jobs:
       - name: Package project
         run: python setup.py sdist bdist_wheel
       - name: Project versioning
-        run: |
-        cd version
-        ./version.py
+        run: python version/version.py
       - name: Upload distributions
         env:
           TWINE_USERNAME: __token__
