@@ -22,7 +22,7 @@ def do_setup() -> None:
         When github action test-pipy-publish.yml got triggered then increment the release version.
         i.e. release vesion + dev0
         """
-        if os.getenv("TEST_PYPI_PUBLISH").lower() == "true":
+        if os.getenv('TEST_PYPI_PUBLISH') == "True":
             setup_kwargs['use_scm_version'] = {'local_scheme': local_scheme}
             setup_kwargs['setup_requires'] = ['setuptools_scm']
 
