@@ -1,9 +1,13 @@
 name: Publishing Python packages on TestPyPi
 
+# on:
+#   push:
+#     branches:
+#       - master
 on:
   push:
-    branches:
-      - master
+    branches-ignore:
+      - '**'
 
 jobs:
   publish-package:

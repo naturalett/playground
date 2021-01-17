@@ -2,8 +2,13 @@ name: Publishing Python packages on PyPi
 
 on:
   push:
-    tags:
-      - '**'
+    branches:
+      - master
+
+# on:
+#   push:
+#     tags:
+#       - '**'
 
 jobs:
   publish-package:
