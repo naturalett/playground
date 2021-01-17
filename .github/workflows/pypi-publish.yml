@@ -1,14 +1,14 @@
 name: Publishing Python packages on PyPi
 
-on:
-  push:
-    branches:
-      - master
-
 # on:
 #   push:
-#     tags:
-#       - '**'
+#     branches:
+#       - master
+
+on:
+  push:
+    tags:
+      - '**'
 
 jobs:
   publish-package:
@@ -27,13 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine GitPython
       - name: Project versioning
-        run: |
-          echo "Execute script"
-          output=$(./version/version.py)
-          echo "::set-output name=changelog::$output"
-        id: step1
-      - name: Print changelog
-        run: echo "${{ steps.step1.outputs.changelog }}"
+        run: ./version/version.py
       - name: Package project
         run: python setup.py sdist bdist_wheel
       - name: Upload distributions
