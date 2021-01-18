@@ -5,8 +5,6 @@ from os.path import dirname, relpath
 with open("packaging_tutorial/README.md", "r") as fh:
     long_description = fh.read()
 
-def local_scheme(version):
-    return ""
 
 
 
@@ -17,15 +15,18 @@ def do_setup() -> None:
     """
     setup_kwargs = {}
 
+    def local_scheme(version):
+        return ""
+
     def test_pypi_publish() -> None:
         """
         When github action test-pipy-publish.yml got triggered then increment the release version.
         i.e. release vesion + dev0
         """
-        if os.getenv('TEST_PYPI_PUBLISH', 'True').lower() in ["True"]:
+        if os.getenv('TEST_PYPI_PUBLISH', 'True').lower() in ['True']:
             setup_kwargs['use_scm_version'] = {'local_scheme': local_scheme}
             setup_kwargs['setup_requires'] = ['setuptools_scm']
-
+    print(f'setup_kwargs: {setup_kwargs}')
     test_pypi_publish()
     setuptools.setup(
         name="example-pkg-naturalett", # Replace with your own username
