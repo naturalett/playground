@@ -26,8 +26,9 @@ def do_setup() -> None:
         if os.getenv('TEST_PYPI_PUBLISH', 'True').lower() in ['True']:
             setup_kwargs['use_scm_version'] = {'local_scheme': local_scheme}
             setup_kwargs['setup_requires'] = ['setuptools_scm']
-    print(f'setup_kwargs: {setup_kwargs}')
+    print(f'setup_kwargs before: {setup_kwargs}')
     test_pypi_publish()
+    print(f'setup_kwargs after: {setup_kwargs}')
     setuptools.setup(
         name="example-pkg-naturalett", # Replace with your own username
         version=os.environ.get("LIMINAL_BUILD_VERSION", os.environ.get('LIMINAL_VERSION', None)),
