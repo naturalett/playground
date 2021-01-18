@@ -26,7 +26,7 @@ def do_setup() -> None:
         print("Status")
         print(os.environ.get('TEST_PYPI_PUBLISH'))
         print(os.environ['HOME'])
-        if os.environ.get('TEST_PYPI_PUBLISH') == True:
+        if os.environ.get('TEST_PYPI_PUBLISH') == 'True':
             setup_kwargs['use_scm_version'] = {'local_scheme': local_scheme}
             setup_kwargs['setup_requires'] = ['setuptools_scm']
     print(f'setup_kwargs before: {setup_kwargs}')
