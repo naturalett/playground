@@ -35,10 +35,13 @@ class VersionPattern:
             _LOG.warning('gitpython not found: Cannot compute the git version.')
             return ''
         if repo:
-            tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-            latest_tag = tags[-1]
-            latest_tag_commit = latest_tag.commit
-
+            if os.getenv('TEST_PYPI_PUBLISH'):
+                latest_tag_commit = repo.head.commit
+                latest_tag = ""
+            else:
+                tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+                latest_tag = tags[-1]
+                latest_tag_commit = latest_tag.commit
             return latest_tag, latest_tag_commit
 
         return 'no_git_version'
