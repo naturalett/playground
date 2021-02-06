@@ -7,15 +7,14 @@ name: Publishing Python packages on PyPi
 
 on:
   workflow_run:
-    workflows: ["unitests"]
+    workflows: ["Example unittest"]
+    tags: ['**']
     types: 
       - completed
-  push:
-    tags:
-      - '**'
 
 jobs:
   publish-package:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Publish package
     runs-on: ubuntu-latest
     steps:
