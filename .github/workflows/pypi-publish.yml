@@ -6,6 +6,10 @@ name: Publishing Python packages on PyPi
 #       - master
 
 on:
+  workflow_run:
+    workflows: ["build"]
+    types: 
+      - completed
   push:
     tags:
       - '**'
