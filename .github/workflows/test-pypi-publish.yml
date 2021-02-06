@@ -3,7 +3,7 @@ name: Publishing Python packages on TestPyPi
 on:
   workflow_run:
     workflows: ["unitests"]
-    branches: [master]
+    branches: ['master']
     types: 
       - completed
 # on:
