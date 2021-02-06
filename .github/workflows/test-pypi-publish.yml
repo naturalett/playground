@@ -2,7 +2,8 @@ name: Publishing Python packages on TestPyPi
 
 on:
   workflow_run:
-    workflows: ["unitests"]
+    workflows: ["Example unittest"]
+    branches: ['master']
     types: 
       - completed
 # on:
