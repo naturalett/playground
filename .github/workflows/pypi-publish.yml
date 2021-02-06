@@ -6,13 +6,13 @@ name: Publishing Python packages on PyPi
 #       - master
 
 on:
+  push:
+    tags:
+      - '**'
   workflow_run:
     workflows: ["Example unittest"]
     types: 
       - completed
-  push:
-    tags:
-      - '**'
 
 jobs:
   publish-package:
