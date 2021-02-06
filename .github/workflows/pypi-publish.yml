@@ -8,9 +8,11 @@ name: Publishing Python packages on PyPi
 on:
   workflow_run:
     workflows: ["Example unittest"]
-    tags: ['**']
     types: 
       - completed
+  push:
+    tags:
+      - '**'
 
 jobs:
   publish-package:
