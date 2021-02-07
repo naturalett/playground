@@ -13,7 +13,7 @@ on:
 
 jobs:
   publish-package:
-    if: github.ref == 'ref/head/v*'
+    if: startsWith(github.ref, 'refs/tags/') && success()
     name: Publish package
     runs-on: ubuntu-latest
     steps:
