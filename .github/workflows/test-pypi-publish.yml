@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Print env
-        run: echo "${{ env.GITHUB_REF }}"
+        run: echo "$REF"
       - name: Set env
         run: |
           echo "LIMINAL_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
