@@ -8,6 +8,7 @@ name: Publishing Python packages on PyPi
 on:
   workflow_run:
     workflows: ["Example unittest"]
+    branches-ignore: ['master']
     types: 
       - completed
 
@@ -19,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Print env
-        run: echo "${{ env.GITHUB_REF }}"
+        run: echo "REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set env
         run: echo "LIMINAL_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up Python
