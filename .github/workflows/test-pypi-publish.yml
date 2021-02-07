@@ -14,6 +14,8 @@ on:
 jobs:
   publish-package:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Print env
+    run: echo "${{ env.GITHUB_REF }}"
     name: Publish package
     runs-on: ubuntu-latest
     steps:
