@@ -13,8 +13,7 @@ on:
 
 jobs:
   publish-package:
-    if: |
-      {{ github.ref == 'ref/head/v*' }}
+    if: {{ github.ref == 'ref/head/v*' }}
     name: Publish package
     runs-on: ubuntu-latest
     steps:
