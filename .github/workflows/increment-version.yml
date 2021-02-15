@@ -5,12 +5,6 @@ name: git-auto-commit
 #     branches:
 #       - master
 
-on:
-  push:
-    tags:
-      - '**'
-
-
 on: push
 
 jobs:
