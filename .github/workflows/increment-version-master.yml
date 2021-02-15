@@ -1,9 +1,6 @@
 name: RC increment versions
 
-on:
-  push:
-    tags:
-      - '**'
+on: [push]
 
 jobs:
   git-auto-commit:
