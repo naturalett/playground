@@ -1,4 +1,4 @@
-name: Publishing Python packages on PyPi
+name: git-auto-commit
 
 # on:
 #   push:
@@ -10,7 +10,6 @@ on:
     tags:
       - '**'
 
-name: git-auto-commit
 
 on: push
 
