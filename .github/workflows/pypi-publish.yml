@@ -7,8 +7,13 @@ name: Publishing Python packages on PyPi
 
 on:
   push:
-    tags:
+    branches-ignore:
       - '**'
+
+# on:
+#   push:
+#     tags:
+#       - '**'
 
 jobs:
   publish-package:

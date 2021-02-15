@@ -1,6 +1,9 @@
 name: RC increment versions
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   git-auto-commit:
