@@ -1,21 +1,17 @@
-name: git-auto-commit
+name: RC increment versions
 
-# on:
-#   push:
-#     branches:
-#       - master
-
-on: push
+on:
+  push:
+    tags:
+      - '**'
 
 jobs:
   git-auto-commit:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set env
-      run: |
-        echo "TEST_PYPI_PUBLISH=True" >> $GITHUB_ENV
+      run: echo "LIMINAL_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
@@ -26,12 +22,9 @@ jobs:
         pip install GitPython
     - name: Project versioning
       run: ./version/version.py
-    - name: Create report file
-      run: date +%s > report.txt
     - name: Commit report
       run: |
-        git config --global user.name 'Your Name'
-        git config --global user.email 'your-username@users.noreply.github.com'
-        git commit -am "Automated report"
+        git config --global user.name 'Liminal Bot'
+        git commit -am "Increment version"
         git push
       

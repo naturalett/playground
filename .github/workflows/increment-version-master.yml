@@ -1,0 +1,31 @@
+name: RC increment versions
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  git-auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set env
+      run: echo "TEST_PYPI_PUBLISH=True" >> $GITHUB_ENV
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.6'
+    - name: Install dependencies for setup
+      run: |
+        python -m pip install --upgrade pip
+        pip install GitPython
+    - name: Project versioning
+      run: ./version/version.py
+    - name: Commit report
+      run: |
+        git config --global user.name 'Liminal Bot'
+        git commit -am "Increment version"
+        git push
+      
