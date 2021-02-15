@@ -37,12 +37,16 @@ class VersionPattern:
         if repo:
             if os.getenv('ALPHA'):
                 latest_tag_commit = repo.head.commit
+                print("latest_tag_commit: " + latest_tag_commit)
                 latest_tag = ""
             else:
                 tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+                print("tags: " + tags)
                 latest_tag = tags[-1]
+                print("latest_tag: " + latest_tag)
                 # latest_tag = os.getenv('LIMINAL_VERSION')
                 latest_tag_commit = latest_tag.commit
+                print("latest_tag_commit: " + latest_tag_commit)
             return latest_tag, latest_tag_commit
 
         return 'no_git_version'
