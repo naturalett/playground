@@ -26,15 +26,12 @@ jobs:
         pip install GitPython
     - name: Project versioning
       run: ./version/version.py
-    - name: Use git-auto-commit-action
-      id: "auto-commit-action"
-      uses: ./version/__init__.py
-
-    - name: "no changes detected"
-      if: steps.auto-commit-action.outputs.changes_detected == false
-      run: "echo \"No changes detected\""
-
-    - name: "changes detected"
-      if: steps.auto-commit-action.outputs.changes_detected == true
-      run: "echo \"Changes detected\""
+    - name: Create report file
+      run: date +%s > report.txt
+    - name: Commit report
+      run: |
+        git config --global user.name 'Your Name'
+        git config --global user.email 'your-username@users.noreply.github.com'
+        git commit -am "Automated report"
+        git push
       
