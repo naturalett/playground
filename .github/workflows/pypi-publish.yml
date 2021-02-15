@@ -6,21 +6,17 @@ name: Publishing Python packages on PyPi
 #       - master
 
 on:
-  workflow_run:
-    workflows: ["Example unittest"]
-    branches-ignore: ['master']
-    types: 
-      - completed
+  push:
+    tags:
+      - '**'
 
 jobs:
   publish-package:
-    if: github.event.workflow_run.conclusion == 'success'
+    # if: github.event.workflow_run.conclusion == 'success'
     name: Publish package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Print env
-        run: echo "REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set env
         run: echo "LIMINAL_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up Python
