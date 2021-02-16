@@ -43,6 +43,8 @@ class VersionPattern:
                 tag = next((tag for tag in repo.tags if tag.commit == repo.head.commit), None)
                 print("repo.head.commit: " + str(repo.head.commit))
                 print("repo.head.tag: " + str(tag))
+                tag_off = os.getenv('GIT_TAG')
+                print("repo.head.GIT_TAG : " + str(tag_off))
                 print("repo.head.repo repo: " + str(repo))
                 tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
                 print("tags All dev: " + str(tags))
