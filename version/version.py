@@ -1,22 +1,22 @@
 #!/usr/bin/env python
-import os, re, logging, sys
+import os, re, logging
 from os.path import dirname
 
 _LOG = logging.getLogger(__name__)
-SNAPSHOT_SUFFIX = '.dev.'
 
 my_dir = dirname(__file__)
 
-class VersionBumper:
+class VersionPattern:
     """
     Version pattern class
     """
+
     def __init__(self, is_release):
         self.path = os.path.join(*[my_dir, "__init__.py"])
-        self.__release = is_release
         self.patterns_parser = self._patterns_parser()
+        self.__release = is_release
 
-    def _git_version(self):
+    def git_version(self):
         """
         Return a tag of the latest version and its commit hash.
         :return: A latest_tag and latest_tag_commit
@@ -36,21 +36,18 @@ class VersionBumper:
             _LOG.warning('gitpython not found: Cannot compute the git version.')
             return ''
         if repo:
-            print("repo.tags: " + str(os.getenv('RELEASE_VERSION')))
-            tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-            print("tags: " + str(tags))
-            latest_tag = tags[-1]
-            latest_tag = str(os.getenv('RELEASE_VERSION'))
-            print("latest_tag: " + str(latest_tag))
             if not self.__release:
+                latest_tag_commit = repo.head.commit
+                latest_tag = ""
+            else:
+                tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+                latest_tag = tags[-1]
                 latest_tag_commit = latest_tag.commit
-                sha = repo.head.commit.hexsha
-                short_sha = repo.git.rev_parse(sha, short=7)
-                latest_tag = latest_tag + SNAPSHOT_SUFFIX + short_sha
-            return latest_tag
+            return latest_tag, latest_tag_commit
+
         return 'no_git_version'
 
-    def _replace(self, pattern: str, new_version: str):
+    def replace(self, pattern: str, new_version: str):
         """
         Update the versions matching this pattern.
         This method reads the underlying file, replaces each occurrence of the
@@ -76,26 +73,32 @@ class VersionBumper:
         Because a pattern can match in multiple places, this method returns a
         set of matches.
         """
-        latest_tag = self._git_version()
+        latest_tag, latest_tag_commit = self.git_version()
         patterns_parser = [
-            {'pattern': r'^(__version__) = .*$', 'new_version': latest_tag}
+            {'pattern': r'^(__version__) = .*$', 'new_version': latest_tag},
+            {'pattern': r'^(__sha__) = .*$', 'new_version': latest_tag_commit}
         ]
-        print("patterns_parser: " + str(patterns_parser))
 
         return patterns_parser
 
-    def _write_version(self):
+    def write_version(self):
         """
         Write the Semver version + git hash to file.
         """
         for parser in self.patterns_parser:
-            print("parser: " + str(parser))
-            self._replace(parser['pattern'], parser['new_version'])
+            self.replace(parser['pattern'], parser['new_version'])
             _LOG.debug(
                 f"Writing new version number: path={self.path!r} version={parser['new_version']!r}"
             )
 
         return True
+
+# def do_setup() -> None:
+#     version = VersionPattern()
+#     version.write_version()
+
+# if __name__ == "__main__":
+#     do_setup()
 
 def main():
     RELEASE_MODE = 'release'
@@ -107,8 +110,8 @@ def main():
     if args[1] not in [RELEASE_MODE, DEV_MODE]:
         raise Exception('Script should be invoked with either \'release\' or \'dev\'')
 
-    bumper = VersionBumper(True if args[1] == RELEASE_MODE else False)
-    bumper._write_version()
+    version = VersionPattern(True if args[1] == RELEASE_MODE else False)
+    version.write_version()
 
 if __name__ == "__main__":
     main()

@@ -11,9 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set env
-      run: |
-        echo "RELEASE_VERSION=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
