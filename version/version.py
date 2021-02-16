@@ -1,89 +1,110 @@
-import re
-import os
-import sys
+#!/usr/bin/env python
+import os, re, logging
+from os.path import dirname
 
-# This class will bump the version in the setup.py file under the current directory (script will be run from root)
-# This class will only promote the patch number (updates of the major and minor versions should be done manually
-# when needed)
-class Version_Bumper(object):
+_LOG = logging.getLogger(__name__)
+SNAPSHOT_SUFFIX = '.dev.'
 
-    SETUP_FILENAME = '__init__.py'
-    SNAPSHOT_SUFFIX = '.dev'
-    VERSION_SUFFIX = '.ni'
-    VERSION = '__version__'
-    SHA = '__sha__'
-    VERSION_FORMAT = '((\d+\.\d+\.)(\d+)\.?\w*)'
+my_dir = dirname(__file__)
 
-    def __init__(self, is_release, suffix):
+class VersionBumper:
+    """
+    Version pattern class
+    """
+    def __init__(self, is_release):
+        self.path = os.path.join(*[my_dir, "__init__.py"])
         self.__release = is_release
-        self.__suffix = suffix
+        self.patterns_parser = self._patterns_parser()
 
-    # in the case we are in a release flow -- the patch will be promoted
-    # in the case we are in a snapshot flow -- the patch will be promoted and a .dev suffix will be added
-    def bump_version(self):
+    def _git_version(self):
+        """
+        Return a tag of the latest version and its commit hash.
+        :return: A latest_tag and latest_tag_commit
+        """
+        try:
+            import git
 
-        tempfile = 'temp_init.py'
+            try:
+                repo = git.Repo(os.path.join(*[my_dir, "../.git"]))
+            except git.NoSuchPathError:
+                _LOG.warning('.git directory not found: Cannot compute the git version')
+                return ''
+            except git.InvalidGitRepositoryError:
+                _LOG.warning('Invalid .git directory not found: Cannot compute the git version')
+                return ''
+        except ImportError:
+            _LOG.warning('gitpython not found: Cannot compute the git version.')
+            return ''
+        if repo:
+            tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+            latest_tag = tags[-1]
+            if not self.__release:
+                latest_tag_commit = latest_tag.commit
+                sha = repo.head.commit.hexsha
+                short_sha = repo.git.rev_parse(sha, short=7)
+                latest_tag = str(latest_tag) + SNAPSHOT_SUFFIX + short_sha
+            return latest_tag
+        return 'no_git_version'
 
-        with open(Version_Bumper.SETUP_FILENAME, 'r') as input_file:
-            with open(tempfile, 'w') as output_file:
-                for line in input_file:
-                    if Version_Bumper.VERSION in line:
-                        old_version, next_version = self._calc_versions(line)
-                        output_file.write(line.replace(old_version, next_version))
-                    else:
-                        output_file.write(line)
+    def _replace(self, pattern: str, new_version: str):
+        """
+        Update the versions matching this pattern.
+        This method reads the underlying file, replaces each occurrence of the
+        matched pattern, then writes the updated file.
+        :param new_version: The new version number as a string
+        """
 
-        os.remove(Version_Bumper.SETUP_FILENAME)
-        os.rename(tempfile, Version_Bumper.SETUP_FILENAME)
-        return next_version
-        
-    def _calc_versions(self, line):
-        # type: (str) -> tuple
-        
-        match = re.search(Version_Bumper.VERSION_FORMAT, line)
-        
-        if match is None:
-            raise Exception('Version number in {} must follow the convention x.y.z. Version NOT bumped'.format(Version_Bumper.SETUP_FILENAME))
-        
-        version = match.group(1)
-        version_prefix = match.group(2)
-        patch_number = int(match.group(3))
+        with open(self.path, "r") as f:
+            old_content = f.read()
 
-        old_version = version
-        next_version = version_prefix + self._get_next_version_number(patch_number)
+        new_content = re.sub(pattern, r'\1 = "{0}"'.format(new_version), old_content, flags=re.MULTILINE)
 
-        return old_version, next_version
+        _LOG.debug(
+            f"Writing new version number: path={self.path!r} version={new_version!r}"
+        )
 
-    def _get_next_version_number(self, patch_number):
-        # type: (int) -> str
-        
-        next_version_number = str(patch_number + 1)
+        with open(self.path, mode="w") as f:
+            f.write(new_content)
 
-        if not self.__release:
-            next_version_number += Version_Bumper.SNAPSHOT_SUFFIX
+    def _patterns_parser(self):
+        """
+        Return the versions matching this pattern.
+        Because a pattern can match in multiple places, this method returns a
+        set of matches.
+        """
+        latest_tag = self._git_version()
+        patterns_parser = [
+            {'pattern': r'^(__version__) = .*$', 'new_version': latest_tag}
+        ]
+        print("patterns_parser: " + str(patterns_parser))
 
-        if self.__suffix:
-            next_version_number += Version_Bumper.VERSION_SUFFIX
+        return patterns_parser
 
-        return next_version_number
+    def _write_version(self):
+        """
+        Write the Semver version + git hash to file.
+        """
+        for parser in self.patterns_parser:
+            print("parser: " + str(parser))
+            self._replace(parser['pattern'], parser['new_version'])
+            _LOG.debug(
+                f"Writing new version number: path={self.path!r} version={parser['new_version']!r}"
+            )
 
-
+        return True
 
 def main():
-
     RELEASE_MODE = 'release'
     DEV_MODE = 'dev'
-    SUFFIX = 'ni'
     args = sys.argv
 
-    if len(args) > 3:
-       raise Exception('Script should be invoked with one command line argument indicating if we are in release mode')
+    if len(args) > 1:
+        raise Exception('Script should be invoked with one command line argument indicating if we are in release mode or dev mode')
     if args[1] not in [RELEASE_MODE, DEV_MODE]:
         raise Exception('Script should be invoked with either \'release\' or \'dev\'')
 
-    bumper = Version_Bumper(True if args[1] == RELEASE_MODE else False, SUFFIX in args or False)
-    return bumper.bump_version()
+    bumper = VersionBumper(True if args[1] == RELEASE_MODE else False)
+    bumper._write_version()
 
-
-
-print(main())
+if __name__ == "__main__":
+    main()
