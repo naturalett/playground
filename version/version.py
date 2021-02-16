@@ -98,7 +98,7 @@ def main():
     DEV_MODE = 'dev'
     args = sys.argv
 
-    if len(args) > 1:
+    if len(args) > 2:
         raise Exception('Script should be invoked with one command line argument indicating if we are in release mode or dev mode')
     if args[1] not in [RELEASE_MODE, DEV_MODE]:
         raise Exception('Script should be invoked with either \'release\' or \'dev\'')
