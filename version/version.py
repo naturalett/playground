@@ -40,7 +40,7 @@ class VersionPattern:
             # latest_tag = tags[-1]
             if not self.__release:
                 latest_tag_commit = repo.head.commit
-                # latest_tag = ""
+                latest_tag = ""
             else:
                 tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
                 latest_tag = tags[-1]
