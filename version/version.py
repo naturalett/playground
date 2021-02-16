@@ -13,8 +13,8 @@ class VersionPattern:
 
     def __init__(self, is_release):
         self.path = os.path.join(*[my_dir, "__init__.py"])
-        self.patterns_parser = self._patterns_parser()
         self.__release = is_release
+        self.patterns_parser = self._patterns_parser()
 
     def git_version(self):
         """
