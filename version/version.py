@@ -36,16 +36,17 @@ class VersionBumper:
             _LOG.warning('gitpython not found: Cannot compute the git version.')
             return ''
         if repo:
-            print("repo.tags: " + str(os.getenv('GIT_TAG')))
+            print("repo.tags: " + str(os.getenv('RELEASE_VERSION')))
             tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
             print("tags: " + str(tags))
             latest_tag = tags[-1]
+            latest_tag = str(os.getenv('RELEASE_VERSION'))
             print("latest_tag: " + str(latest_tag))
             if not self.__release:
                 latest_tag_commit = latest_tag.commit
                 sha = repo.head.commit.hexsha
                 short_sha = repo.git.rev_parse(sha, short=7)
-                latest_tag = str(latest_tag) + SNAPSHOT_SUFFIX + short_sha
+                latest_tag = latest_tag + SNAPSHOT_SUFFIX + short_sha
             return latest_tag
         return 'no_git_version'
 
