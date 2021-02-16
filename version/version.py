@@ -36,14 +36,14 @@ class VersionPattern:
             _LOG.warning('gitpython not found: Cannot compute the git version.')
             return ''
         if repo:
-            tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-            latest_tag = tags[-1]
+            # tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+            # latest_tag = tags[-1]
             if not self.__release:
                 latest_tag_commit = repo.head.commit
                 # latest_tag = ""
             else:
-                # tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
-                # latest_tag = tags[-1]
+                tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+                latest_tag = tags[-1]
                 latest_tag_commit = latest_tag.commit
             return latest_tag, latest_tag_commit
 
@@ -77,9 +77,13 @@ class VersionPattern:
         """
         latest_tag, latest_tag_commit = self.git_version()
         patterns_parser = [
-            {'pattern': r'^(__version__) = .*$', 'new_version': latest_tag},
             {'pattern': r'^(__sha__) = .*$', 'new_version': latest_tag_commit}
         ]
+
+        if self.__release:
+            patterns_parser += [
+                {'pattern': r'^(__version__) = .*$', 'new_version': latest_tag}
+            ]
 
         return patterns_parser
 
