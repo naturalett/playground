@@ -40,7 +40,9 @@ class VersionPattern:
             # latest_tag = tags[-1]
             if not self.__release:
                 latest_tag_commit = repo.head.commit
+                tag = next((tag for tag in repo.tags if tag.commit == repo.head.commit), None)
                 print("repo.head.commit: " + str(repo.head.commit))
+                print("repo.head.tag: " + str(tag))
                 print("repo.head.repo repo: " + str(repo))
                 tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
                 print("tags All dev: " + str(tags))
