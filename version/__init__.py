@@ -9,4 +9,4 @@ of the semver specifictation
 #: Semver version
 __version__ = ""
 #: Sha hash
-__sha__ = "11b512e8d3adc2e336bda722f2513c6068798b85"
+__sha__ = ""
