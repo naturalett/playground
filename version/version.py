@@ -37,7 +37,9 @@ class VersionBumper:
             return ''
         if repo:
             tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+            print("tags: " + str(tags))
             latest_tag = tags[-1]
+            print("latest_tag: " + str(latest_tag))
             if not self.__release:
                 latest_tag_commit = latest_tag.commit
                 sha = repo.head.commit.hexsha
