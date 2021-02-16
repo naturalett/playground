@@ -7,6 +7,6 @@ of the semver specifictation
 """
 
 #: Semver version
-__version__ = "v5.45"
+__version__ = ""
 #: Sha hash
-__sha__ = "b0a3ef8ba217c2451cb070aca896641ad293e8e7"
+__sha__ = "11b512e8d3adc2e336bda722f2513c6068798b85"
