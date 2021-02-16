@@ -36,6 +36,7 @@ class VersionBumper:
             _LOG.warning('gitpython not found: Cannot compute the git version.')
             return ''
         if repo:
+            print("repo.tags: " + str(repo.tags))
             tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
             print("tags: " + str(tags))
             latest_tag = tags[-1]
