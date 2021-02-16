@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies for setup
       run: |
         python -m pip install --upgrade pip
-        pip install GitPython sys
+        pip install GitPython
     - name: Project versioning
       run: ./version/version.py dev
     - name: Commit report
