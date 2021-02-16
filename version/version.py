@@ -44,6 +44,9 @@ class VersionPattern:
             else:
                 tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
                 latest_tag = tags[-1]
+                latest_tag = tags[0]
+                print("latest_tag: " + str(latest_tag))
+                print("tags All: " + str(tags))
                 latest_tag_commit = latest_tag.commit
             return latest_tag, latest_tag_commit
 
