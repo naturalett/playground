@@ -23,7 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install GitPython
     - name: Project versioning
-      run: ./version/version.py dev
+      run: bumpversion build
     - name: Commit report
       run: |
         git config --global user.name 'Liminal Bot'
