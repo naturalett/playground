@@ -1,11 +1,11 @@
 name: Running unittest
 
-# on: [push]
+on: [push]
 
-on:
-  push:
-    branches-ignore:
-      - '**'
+# on:
+#   push:
+#     branches-ignore:
+#       - '**'
 
 jobs:
   unittest:
@@ -20,6 +20,11 @@ jobs:
         minikube version: 'v1.16.0'
         kubernetes version: 'v1.19.2'
         github token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check k8s status
+      run: |
+        kubectl cluster-info
+        kubectl get pods -n kube-system
+        docker ps
     - name: Set up Python
       uses: actions/setup-python@v1
       with:

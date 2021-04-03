@@ -1,11 +1,11 @@
 name: Running unittest
 
-on: [push]
+# on: [push]
 
-# on:
-#   push:
-#     branches-ignore:
-#       - '**'
+on:
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   unittest:
@@ -24,7 +24,7 @@ jobs:
       run: |
         kubectl cluster-info
         kubectl get pods -n kube-system
-        docker ps        
+        docker ps
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
